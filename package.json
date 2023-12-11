@@ -35,7 +35,8 @@
     "prepack": "yarn run build",
     "release": "./scripts/release.sh",
     "test": "jest",
-    "version": "yarn run changelog"
+    "version": "yarn run changelog",
+    "lintFix": "eslint --fix && prettier src --write"
   },
   "dependencies": {
     "lodash": "4.17.21",

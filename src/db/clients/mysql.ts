@@ -1,24 +1,24 @@
-import mysql from 'mysql2'
-import { AppSettingsData } from 'src/types'
-import { getSanitizedSqlValue } from '../sql-utils'
-import { DbClient, MysqlConfig } from '../types'
+import mysql from 'mysql2';
+import { AppSettingsData } from 'src/types';
+import { getSanitizedSqlValue } from '../sql-utils';
+import { DbClient, MysqlConfig } from '../types';
 
 export class MysqlClient extends DbClient {
   protected async _init() {}
 
   private async query(query: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const connection = mysql.createConnection(this.dbConfig as MysqlConfig)
+      const connection = mysql.createConnection(this.dbConfig as MysqlConfig);
 
       connection.query(query, (err, results) => {
         if (err) {
-          connection.end()
-          return reject(err)
+          connection.end();
+          return reject(err);
         }
-        connection.end()
-        return resolve(results)
-      })
-    })
+        connection.end();
+        return resolve(results);
+      });
+    });
   }
 
   async setup() {
@@ -33,30 +33,30 @@ export class MysqlClient extends DbClient {
         primary key (id),
         CONSTRAINT UK_setting_key UNIQUE (setting_key)
       );
-    `
-    await this.query(query)
+    `;
+    await this.query(query);
   }
 
   public async set(data: AppSettingsData) {
-    const { type, key } = data
-    let value = data.value
+    const { type, key } = data;
+    let value = data.value;
     if (typeof value === 'object' && type === 'json') {
-      value = JSON.stringify(value)
+      value = JSON.stringify(value);
     }
 
-    const settingKey = getSanitizedSqlValue(key)
-    const settingValue = getSanitizedSqlValue(value)
-    const settingType = getSanitizedSqlValue(type)
+    const settingKey = getSanitizedSqlValue(key);
+    const settingValue = getSanitizedSqlValue(value);
+    const settingType = getSanitizedSqlValue(type);
 
     const sql = `insert into ${this.tableName}(setting_key, setting_type, setting_value)
     values (${settingKey}, ${settingType}, ${settingValue})
-    ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), setting_type = VALUES(setting_type);`
+    ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), setting_type = VALUES(setting_type);`;
 
-    await this.query(sql)
+    await this.query(sql);
   }
 
   public async getAll() {
-    const results = await this.query(`select * from ${this.tableName}`)
-    return results
+    const results = await this.query(`select * from ${this.tableName}`);
+    return results;
   }
 }

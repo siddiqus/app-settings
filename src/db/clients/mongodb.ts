@@ -1,64 +1,69 @@
-import { Collection, Db, MongoClient, MongoClientOptions } from 'mongodb'
-import { AppSettingsData } from 'src/types'
-import { DbClient, MongoConfig, SettingsDbData } from '../types'
+import { Collection, Db, MongoClient, MongoClientOptions } from 'mongodb';
+import { AppSettingsData } from 'src/types';
+import { DbClient, MongoConfig, SettingsDbData } from '../types';
 
 function generateMongoDBConnectionUri(config: {
-  user: string
-  password: string
-  host: string
-  database: string
-  port?: number
+  user: string;
+  password: string;
+  host: string;
+  database: string;
+  port?: number;
 }): string {
-  const { user, password, host } = config
+  const { user, password, host } = config;
 
   const uri = `mongodb://${encodeURIComponent(user)}:${encodeURIComponent(
-    password
-  )}@${host}`
+    password,
+  )}@${host}`;
 
-  console.log(uri)
-  return uri
+  console.log(uri);
+  return uri;
 }
 
 export class MongoDbClient extends DbClient {
-  private client?: MongoClient
-  private database?: Db
-  private collection?: Collection
+  private client?: MongoClient;
+  private database?: Db;
+  private collection?: Collection;
 
   private checkConnection() {
     if (!this.client) {
-      throw new Error('setup() not called!')
+      throw new Error('setup() not called!');
     }
   }
 
   public async setup() {
     const { user, password, host, database, ...options } = this
-      .dbConfig as MongoConfig
+      .dbConfig as MongoConfig;
 
-    const uri = generateMongoDBConnectionUri({ user, password, host, database })
+    const uri = generateMongoDBConnectionUri({
+      user,
+      password,
+      host,
+      database,
+    });
 
-    this.client = new MongoClient(uri, options as MongoClientOptions)
-    await this.client.connect()
+    this.client = new MongoClient(uri, options as MongoClientOptions);
+    await this.client.connect();
 
-    this.database = this.client.db(this.dbConfig.database)
+    this.database = this.client.db(this.dbConfig.database);
 
-    await this.database.createCollection(this.tableName)
-    this.collection = this.database!.collection(this.tableName)
+    await this.database.createCollection(this.tableName);
+    this.collection = this.database!.collection(this.tableName);
   }
 
   public async set(data: AppSettingsData) {
-    this.checkConnection()
+    this.checkConnection();
 
     await this.collection!.updateOne(
       { setting_key: data.key },
       { $set: { setting_value: data.value, setting_type: data.type } },
-      { upsert: true }
-    )
+      { upsert: true },
+    );
   }
 
   public async getAll() {
-    const results = await this.collection!.find().toArray()
+    const results = await this.collection!.find().toArray();
 
-    return (results as any) as SettingsDbData[]
+    return (results as any) as SettingsDbData[];
   }
 }
 

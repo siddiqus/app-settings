@@ -1,33 +1,33 @@
-import { Pool } from 'pg'
-import { AppSettingsData } from 'src/types'
-import { getJsonStringified } from '../sql-utils'
-import { DbClient, PostgresConfig, SettingsDbData } from '../types'
+import { Pool } from 'pg';
+import { AppSettingsData } from 'src/types';
+import { getJsonStringified } from '../sql-utils';
+import { DbClient, PostgresConfig, SettingsDbData } from '../types';
 
 export class PostgresClient extends DbClient {
-  private pool?: Pool
+  private pool?: Pool;
 
   private checkConnection() {
     if (!this.pool) {
-      throw new Error('setup() not called')
+      throw new Error('setup() not called');
     }
   }
 
   private async query(sql: string, values?: any[]) {
-    this.checkConnection()
+    this.checkConnection();
 
-    const client = await this.pool!.connect()
+    const client = await this.pool!.connect();
 
-    const res = await client.query(sql, values)
+    const res = await client.query(sql, values);
 
-    client.release()
+    client.release();
 
-    return res
+    return res;
   }
 
   async setup() {
-    this.pool = new Pool(this.dbConfig as PostgresConfig)
+    this.pool = new Pool(this.dbConfig as PostgresConfig);
 
-    const customUpdateFnName = `custom_on_update_timestamp_trigger_app_settings`
+    const customUpdateFnName = `custom_on_update_timestamp_trigger_app_settings`;
     const createTriggerFunction = `
           begin;
           create or replace function ${customUpdateFnName}()
@@ -38,10 +38,10 @@ export class PostgresClient extends DbClient {
               end;
           $$ language 'plpgsql';
           commit;
-      `
-    await this.query(createTriggerFunction)
+      `;
+    await this.query(createTriggerFunction);
 
-    const customTriggerName = `${this.tableName}__update_timestamp`
+    const customTriggerName = `${this.tableName}__update_timestamp`;
 
     const createTableFunction = `
           begin;
@@ -62,20 +62,20 @@ export class PostgresClient extends DbClient {
           FOR EACH ROW EXECUTE FUNCTION ${customUpdateFnName}();
 
           commit;
-      `
-    await this.query(createTableFunction)
+      `;
+    await this.query(createTableFunction);
   }
 
   public async set(data: AppSettingsData) {
-    this.checkConnection()
+    this.checkConnection();
 
-    const settingKey = data.key
-    const settingType = data.type
+    const settingKey = data.key;
+    const settingType = data.type;
 
-    let settingValue = data.value
+    let settingValue = data.value;
 
     if (data.type === 'json') {
-      settingValue = getJsonStringified(data.value)
+      settingValue = getJsonStringified(data.value);
     }
 
     const sql = `
@@ -84,16 +84,16 @@ export class PostgresClient extends DbClient {
         on conflict(setting_key)
         do
         update set setting_value=EXCLUDED.setting_value, setting_type=EXCLUDED.setting_type;
-    `
+    `;
 
-    await this.query(sql, [settingKey, settingType, settingValue])
+    await this.query(sql, [settingKey, settingType, settingValue]);
   }
 
   public async getAll() {
-    this.checkConnection()
+    this.checkConnection();
 
-    const results = await this.query(`select * from ${this.tableName}`)
+    const results = await this.query(`select * from ${this.tableName}`);
 
-    return (results.rows as any) as SettingsDbData[]
+    return (results.rows as any) as SettingsDbData[];
   }
 }
