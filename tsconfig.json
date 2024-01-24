@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2020",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2018",
     "sourceMap": true,
-    "outDir": "./build",
+    "outDir": "./lib/esm",
     "baseUrl": "./",
     "incremental": true,
     "rootDir": "./",

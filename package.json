@@ -18,12 +18,12 @@
     "name": "Sabbir Siddiqui",
     "email": "sabbir.m.siddiqui@gmail.com"
   },
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
   "files": [
-    "lib"
+    "lib/"
   ],
   "source": "src/index.ts",
-  "main": "lib/index.js",
-  "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
@@ -32,7 +32,7 @@
   "scripts": {
     "prebuild": "rimraf lib/*",
     "prerelease": "yarn build",
-    "build": "microbundle -f 'cjs' --target node --compress",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "changelog": "conventional-changelog --config .changelogrc.js -i CHANGELOG.md -s -a",
     "postchangelog": "git add CHANGELOG.md",
     "cz": "git-cz",
@@ -43,7 +43,8 @@
     "test:cov": "jest --coverage",
     "version": "yarn run changelog",
     "lintFix": "eslint --fix && prettier src --write",
-    "check-deadcode": "ts-prune --ignore src/index.ts -e"
+    "check-deadcode": "ts-prune --ignore src/index.ts -e",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "mongodb": "6.3.0",
