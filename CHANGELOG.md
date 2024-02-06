@@ -26,3 +26,11 @@
 
 * add types to package json ([065cecb](https://github.com/siddiqus/app-settings/commit/065cecb55d1296cc13157106ff558181eb2e9e67))
 
+### [1.0.4](https://github.com/siddiqus/app-settings/compare/1.0.3...1.0.4) (2024-02-06)
+
+
+### Bug Fixes
+
+* update ci ([48ad73d](https://github.com/siddiqus/app-settings/commit/48ad73ddd9cb6349c3423cdb1b4ead33fa0d45cf))
+* update default refresh interval and readme ([180e59d](https://github.com/siddiqus/app-settings/commit/180e59d20c4465353f198b82f6033335ad6604b2))
+
