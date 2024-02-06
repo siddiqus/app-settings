@@ -16,7 +16,7 @@ export class AppSettings {
     refreshIntervalInSeconds?: number;
   }) {
     this.tableName = opts.tableName || 'application_preference';
-    this.refreshIntervalInSeconds = opts.refreshIntervalInSeconds || 3;
+    this.refreshIntervalInSeconds = opts.refreshIntervalInSeconds || 300;
     this.dbClient = getDbClient(opts.dbConfig, this.tableName);
   }
 

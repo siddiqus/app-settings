@@ -38,6 +38,7 @@ const config: MongoConfig = {
 const appSettings = new AppSettings({
   dbConfig: config,
   tableName: 'app_settings_pg',
+  refreshIntervalInSeconds: 300 // default interval is 300 seconds (5 minutes)
 });
 
 async function run() {
