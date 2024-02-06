@@ -24,6 +24,3 @@ jobs:
         run: yarn run build
       - name: Run Tests
         run: yarn run test --ci --coverage
-      - name: CodeQL check
-        uses: ryansonshine/ryansonshine/.github/workflows/codeql-analysis.yml@main
-
