@@ -18,10 +18,11 @@
     "name": "Sabbir Siddiqui",
     "email": "sabbir.m.siddiqui@gmail.com"
   },
-  "main": "./lib/index.js",
+  "main": "./lib/src/index.js",
   "files": [
     "lib/**/*"
   ],
+  "types": "./lib/src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/siddiqus/app-settings"
