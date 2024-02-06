@@ -19,3 +19,10 @@
 
 * trying different publishing method ([d16b45a](https://github.com/siddiqus/app-settings/commit/d16b45ad10abfce67546697bec0755464ae957b8))
 
+### [1.0.3](https://github.com/siddiqus/app-settings/compare/1.0.2...1.0.3) (2024-02-06)
+
+
+### Bug Fixes
+
+* add types to package json ([065cecb](https://github.com/siddiqus/app-settings/commit/065cecb55d1296cc13157106ff558181eb2e9e67))
+
