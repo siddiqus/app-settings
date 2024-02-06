@@ -1,6 +1,6 @@
 {
   "name": "@siddiqus/app-settings",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A NodeJS utility for storing application settings with in-memory cache access",
   "keywords": [
     "app-settings",
@@ -74,10 +74,10 @@
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
     "rimraf": "3.0.2",
+    "semantic-release": "^21.0.1",
     "ts-jest": "29.1.1",
     "ts-prune": "0.10.3",
-    "typescript": "4.8.2",
-    "semantic-release": "^21.0.1"
+    "typescript": "4.8.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
